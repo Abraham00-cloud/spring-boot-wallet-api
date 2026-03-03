@@ -37,13 +37,13 @@ public class WalletController {
 
     @Operation(summary = "Add funds", description = "Increases the wallet balance by the specified amount")
     @PostMapping("/{userId}/fund")
-    public WalletTransactionResponseDto fund(@Valid @PathVariable String userId, @RequestBody WalletTransactionRequestDto requestDto ){
+    public WalletTransactionResponseDto fund(@PathVariable String userId,@Valid @RequestBody WalletTransactionRequestDto requestDto ){
         return service.fundWallet(userId, requestDto);
     }
 
     @Operation(summary = "Debit funds", description = "Decreases the wallet balance by the specified amount")
     @PostMapping("/{userId}/debit")
-    public WalletTransactionResponseDto debit(@Valid @PathVariable String userId, @RequestBody WalletTransactionRequestDto requestDto) {
+    public WalletTransactionResponseDto debit( @PathVariable String userId, @Valid @RequestBody WalletTransactionRequestDto requestDto) {
         return service.debitWallet(userId, requestDto);
     }
 
@@ -54,21 +54,21 @@ public class WalletController {
     }
 
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> handleMethodArgumentNotValidException(
-            MethodArgumentNotValidException exception
-    ) {
-        Map<String, String> errors = new HashMap<>();
-        exception.getBindingResult().getAllErrors()
-                .forEach((error) -> {
-                    String fieldName = ((FieldError) error).getField();
-                    String errorMessage = error.getDefaultMessage();
-                    errors.put(fieldName, errorMessage);
-
-                });
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-
-    }
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public ResponseEntity<?> handleMethodArgumentNotValidException(
+//            MethodArgumentNotValidException exception
+//    ) {
+//        Map<String, String> errors = new HashMap<>();
+//        exception.getBindingResult().getAllErrors()
+//                .forEach((error) -> {
+//                    String fieldName = ((FieldError) error).getField();
+//                    String errorMessage = error.getDefaultMessage();
+//                    errors.put(fieldName, errorMessage);
+//
+//                });
+//        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+//
+//    }
 
 
 

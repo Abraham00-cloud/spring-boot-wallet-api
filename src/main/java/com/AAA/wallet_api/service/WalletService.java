@@ -7,7 +7,9 @@ import com.AAA.wallet_api.model.Wallet;
 import com.AAA.wallet_api.repository.WalletRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 
@@ -31,9 +33,9 @@ public class WalletService {
     @Transactional
     public WalletTransactionResponseDto fundWallet(String userId, WalletTransactionRequestDto requestDto) {
         var amount = requestDto.amount();
-        validateAmount(amount);
+//        validateAmount(amount);
         Wallet wallet = repository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Wallet not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet not found"));
         wallet.setBalance(wallet.getBalance().add(amount));
         var savedWallet = repository.save(wallet);
         return mapper.toResponseDto(savedWallet);
@@ -42,11 +44,11 @@ public class WalletService {
     @Transactional
     public WalletTransactionResponseDto debitWallet(String userId, WalletTransactionRequestDto requestDto) {
         var amount = requestDto.amount();
-        validateAmount(amount);
+//        validateAmount(amount);
         Wallet wallet = repository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Wallet not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet not found"));
         if (wallet.getBalance().compareTo(amount) < 0) {
-            throw  new IllegalStateException("Insufficient funds");
+            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient funds");
         };
         wallet.setBalance(wallet.getBalance().subtract(amount));
         var savedWallet= repository.save(wallet);
@@ -55,15 +57,15 @@ public class WalletService {
 
     public WalletTransactionResponseDto getDetails(String userId) {
         var wallet = repository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Wallet not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet not found"));
         return mapper.toResponseDto(wallet);
     }
 
 
 
-    private void validateAmount(BigDecimal amount) {
-        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw  new IllegalArgumentException("amount cannot be less than zero or empty");
-        }
-    }
+//    private void validateAmount(BigDecimal amount) {
+//        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+//            throw  new IllegalArgumentException("amount cannot be less than zero or empty");
+//        }
+//    }
 }

@@ -5,5 +5,5 @@ import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
 
-public record WalletTransactionRequestDto(@NotNull(message = "Amount is required") @Positive(message = "amount cannot be less that zero") BigDecimal amount) {
+public record WalletTransactionRequestDto(@NotNull(message = "Amount is required") @Positive(message = "Amount must be positive") BigDecimal amount) {
 }
