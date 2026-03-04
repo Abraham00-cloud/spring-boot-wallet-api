@@ -28,9 +28,15 @@ A Spring Boot RESTful API for managing user wallets. Supports creating wallets, 
 
 ---
 
-## Getting Started
+### Getting Started
+1. Clone the repository.
+2. Build the project: `mvn clean install`
+3. Run the application: `mvn spring-boot:run`
+4. Access the API documentation in your browser: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+
 
 ### Clone the repository
 ```bash
 git clone https://github.com/your-username/wallet-api.git
 cd wallet-api
+
